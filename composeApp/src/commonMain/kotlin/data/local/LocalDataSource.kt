@@ -6,10 +6,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalDataSource {
     fun readActiveTasks(): Flow<RequestState<List<TodoTask>>>
-    fun readCompletedTasks(): Flow<RequestState<List<ToDoTask>>>
-    suspend fun addTask(task: ToDoTask)
-    suspend fun updateTask(task: ToDoTask)
-    suspend fun setCompleted(task: ToDoTask, taskCompleted: Boolean)
-    suspend fun setFavorite(task: ToDoTask, isFavorite: Boolean)
-    suspend fun deleteTask(task: ToDoTask)
+    fun readCompletedTasks(): Flow<RequestState<List<TodoTask>>>
+    suspend fun addTask(task: TodoTask)
+    suspend fun updateTask(task: TodoTask)
+    suspend fun setCompleted(task: TodoTask, taskCompleted: Boolean)
+    suspend fun setFavorite(task: TodoTask, isFavorite: Boolean)
+    suspend fun deleteTask(task: TodoTask)
 }

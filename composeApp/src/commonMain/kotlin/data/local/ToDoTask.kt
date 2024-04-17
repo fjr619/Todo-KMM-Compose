@@ -14,10 +14,19 @@ class ToDoTask: RealmObject {
     var completed: Boolean = false
 }
 
-fun ToDoTask.mapToDomain() = TodoTask(
+fun ToDoTask.toDomain() = TodoTask(
     id = this._id,
     title = this.title,
     description = this.description,
     favorite = this.favorite,
     completed = this.completed
 )
+
+fun TodoTask.toData(): ToDoTask {
+    val task = ToDoTask()
+    task.title = this.title
+    task.description = this.description
+    task.favorite = this.favorite
+    task.completed = this.completed
+    return task
+}
