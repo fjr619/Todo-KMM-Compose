@@ -13,11 +13,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import cafe.adriel.voyager.navigator.Navigator
+import cafe.adriel.voyager.transitions.SlideTransition
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import todokmmcompose.composeapp.generated.resources.Res
 import todokmmcompose.composeapp.generated.resources.compose_multiplatform
+import ui.screens.home.HomeScreen
 import ui.theme.AppTheme
 
 @OptIn(ExperimentalResourceApi::class)
@@ -31,25 +34,30 @@ fun App(
         darkTheme = darkTheme,
         dynamicColor = dynamicColor
     ) {
-        Surface(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            var showContent by remember { mutableStateOf(false) }
-            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-                Button(onClick = { showContent = !showContent }) {
-                    Text("Click me!")
-                }
-                AnimatedVisibility(showContent) {
-                    val greeting = remember { Greeting().greet() }
-                    Column(
-                        Modifier.fillMaxWidth(),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Image(painterResource(Res.drawable.compose_multiplatform), null)
-                        Text("Compose: $greeting")
-                    }
-                }
-            }
+
+        Navigator(HomeScreen()) {
+            SlideTransition(it)
         }
+
+//        Surface(
+//            modifier = Modifier.fillMaxSize()
+//        ) {
+//            var showContent by remember { mutableStateOf(false) }
+//            Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+//                Button(onClick = { showContent = !showContent }) {
+//                    Text("Click me!")
+//                }
+//                AnimatedVisibility(showContent) {
+//                    val greeting = remember { Greeting().greet() }
+//                    Column(
+//                        Modifier.fillMaxWidth(),
+//                        horizontalAlignment = Alignment.CenterHorizontally
+//                    ) {
+//                        Image(painterResource(Res.drawable.compose_multiplatform), null)
+//                        Text("Compose: $greeting")
+//                    }
+//                }
+//            }
+//        }
     }
 }
