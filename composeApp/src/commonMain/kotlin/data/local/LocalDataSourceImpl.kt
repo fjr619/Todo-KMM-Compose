@@ -12,43 +12,46 @@ import kotlinx.coroutines.flow.map
 class LocalDataSourceImpl(
     private val realm: Realm
 ): LocalDataSource {
-    override fun readActiveTasks(): Flow<RequestState<List<TodoTask>>> {
+    override fun readActiveTasks(): Flow<List<ToDoTask>> {
         return realm.query<ToDoTask>(query = "completed == $0", false)
             .sort(property = "favorite", sortOrder = Sort.DESCENDING)
             .asFlow()
-            .map { result ->
-                RequestState.Success(
-                    data = result.list
-//                        .sortedByDescending {
-//                            toDoTask -> toDoTask.favorite
-//                    }
-                        .map {
-                        it.toDomain()
-                    }
-                )
+            .map {
+                it.list
             }
+//            .map { result ->
+//                RequestState.Success(
+//                    data = result.list
+////                        .sortedByDescending {
+////                            toDoTask -> toDoTask.favorite
+////                    }
+//                )
+//            }
     }
 
-    override fun readCompletedTasks(): Flow<RequestState<List<TodoTask>>> {
+    override fun readCompletedTasks(): Flow<List<ToDoTask>> {
         return realm.query<ToDoTask>(query = "completed == $0", true)
             .asFlow()
-            .map { result ->
-                RequestState.Success(
-                    data = result.list.map { it.toDomain() }
-                )
+            .map {
+                it.list
             }
+//            .map { result ->
+//                RequestState.Success(
+//                    data = result.list.map { it.toDomain() }
+//                )
+//            }
     }
 
-    override suspend fun addTask(task: TodoTask) {
+    override suspend fun addTask(task: ToDoTask) {
         realm.write {
-            copyToRealm(task.toData())
+            copyToRealm(task)
         }
     }
 
-    override suspend fun updateTask(task: TodoTask) {
+    override suspend fun updateTask(task: ToDoTask) {
         realm.write {
             try {
-                val queriedTask = query<ToDoTask>("_id == $0", task.id).first().find()
+                val queriedTask = query<ToDoTask>("_id == $0", task._id).first().find()
                 queriedTask?.apply {
                     this.title = task.title
                     this.description = task.description
@@ -65,10 +68,10 @@ class LocalDataSourceImpl(
         }
     }
 
-    override suspend fun setCompleted(task: TodoTask, taskCompleted: Boolean) {
+    override suspend fun setCompleted(task: ToDoTask, taskCompleted: Boolean) {
         realm.write {
             try {
-                val queriedTask = query<ToDoTask>("_id == $0", task.id).first().find()
+                val queriedTask = query<ToDoTask>("_id == $0", task._id).first().find()
                 queriedTask?.apply {
                     this.completed = taskCompleted
                 }
@@ -78,10 +81,10 @@ class LocalDataSourceImpl(
         }
     }
 
-    override suspend fun setFavorite(task: TodoTask, isFavorite: Boolean) {
+    override suspend fun setFavorite(task: ToDoTask, isFavorite: Boolean) {
         realm.write {
             try {
-                val queriedTask = query<ToDoTask>("_id == $0", task.id).first().find()
+                val queriedTask = query<ToDoTask>("_id == $0", task._id).first().find()
                 queriedTask?.apply {
                     this.favorite = isFavorite
                 }
@@ -91,10 +94,10 @@ class LocalDataSourceImpl(
         }
     }
 
-    override suspend fun deleteTask(task: TodoTask) {
+    override suspend fun deleteTask(task: ToDoTask) {
         realm.write {
             try {
-                val queriedTask = query<ToDoTask>("_id == $0", task.id).first().find()
+                val queriedTask = query<ToDoTask>("_id == $0", task._id).first().find()
                 queriedTask?.apply {
                     delete(this)
                 }

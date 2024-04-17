@@ -24,6 +24,7 @@ fun ToDoTask.toDomain() = TodoTask(
 
 fun TodoTask.toData(): ToDoTask {
     val task = ToDoTask()
+    if (this.id != null) task._id = this.id
     task.title = this.title
     task.description = this.description
     task.favorite = this.favorite
