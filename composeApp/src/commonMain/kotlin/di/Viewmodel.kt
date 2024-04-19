@@ -6,6 +6,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
+import org.mongodb.kbson.ObjectId
 import ui.screens.home.HomeViewModel
 import ui.screens.task.TaskViewModel
 import kotlin.reflect.KClass
@@ -24,12 +25,13 @@ internal object ViewModelFac : KoinComponent {
 
     @Composable
     fun getTaskViewModel(
+        currentTaskId: ObjectId? = null,
         modelClass: KClass<TaskViewModel>
     ): TaskViewModel {
         return viewModel(
             modelClass,
             factory = viewModelFactory {
-                initializer { TaskViewModel(get()) }
+                initializer { TaskViewModel(currentTaskId, get()) }
             })
     }
 }

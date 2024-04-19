@@ -49,7 +49,7 @@ fun AppGraph(
         composable(
             route = Route.TaskScreen.route
         ) {
-            val taskViewModel = ViewModelFac.getTaskViewModel(TaskViewModel::class)
+            val taskViewModel = ViewModelFac.getTaskViewModel(modelClass = TaskViewModel::class)
             val state by taskViewModel.state.collectAsState()
             TaskScreen(
                 state = state,
