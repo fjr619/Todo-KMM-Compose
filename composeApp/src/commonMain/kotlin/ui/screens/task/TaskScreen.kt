@@ -40,12 +40,12 @@ fun TaskScreen(
                             fontSize = MaterialTheme.typography.titleLarge.fontSize
                         ),
                         singleLine = true,
-                        value = state.currentTitle,
+                        value = state.currentTask.title,
                         onValueChange = {
                             onTaskEvent(TaskEvent.SetTitle(it))
                         },
                         decorationBox = {
-                            if (state.currentTitle.isEmpty()) {
+                            if (state.currentTask.title.isEmpty()) {
                                 Text(
                                     text = TaskViewModel.DEFAULT_TITLE
                                 )
@@ -67,16 +67,13 @@ fun TaskScreen(
             )
         },
         floatingActionButton = {
-            if (state.currentTitle.isNotEmpty() && state.currentDescription.isNotEmpty()) {
+            if (state.currentTask.title.isNotEmpty() && state.currentTask.description.isNotEmpty()) {
                 FloatingActionButton(
                     onClick = {
-                        if(state.currentTask == null) {
-                            onTaskEvent(TaskEvent.Add(TodoTask().copy(
-                                title = state.currentTitle,
-                                description = state.currentDescription
-                            )))
+                        if(state.currentTask.id == null) {
+                            onTaskEvent(TaskEvent.Add)
                         } else {
-
+                            onTaskEvent(TaskEvent.Update)
                         }
 
                         onNavigateUp()
@@ -97,12 +94,12 @@ fun TaskScreen(
                 fontSize = MaterialTheme.typography.titleMedium.fontSize,
                 color = MaterialTheme.colorScheme.onSurface
             ),
-            value = state.currentDescription,
+            value = state.currentTask.description,
             onValueChange = { desc ->
                 onTaskEvent(TaskEvent.SetDesc(desc))
             },
             decorationBox = {
-                if (state.currentDescription.isEmpty()) {
+                if (state.currentTask.description.isEmpty()) {
                     Text(
                         text = TaskViewModel.DEFAULT_DESCRIPTION,
                         color = Color.Gray.copy(alpha = 0.5f)

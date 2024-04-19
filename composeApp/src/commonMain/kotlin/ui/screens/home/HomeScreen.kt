@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import domain.TodoTask
 import ui.screens.home.components.DisplayTasks
 
 
@@ -24,7 +25,7 @@ import ui.screens.home.components.DisplayTasks
 @Composable
 fun HomeScreen(
     state: HomeUiState,
-    navigateToTask: () -> Unit
+    navigateToTask: (TodoTask) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -32,7 +33,9 @@ fun HomeScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = navigateToTask,
+                onClick = {
+                    navigateToTask(TodoTask())
+                },
                 shape = RoundedCornerShape(12.dp),
             ) {
                 Icon(
@@ -47,7 +50,10 @@ fun HomeScreen(
         ) {
             DisplayTasks(
                 modifier = Modifier.weight(1f),
-                tasks = state.activeTask
+                tasks = state.activeTask,
+                onSelect = {
+                    navigateToTask(it)
+                }
             )
 
             Spacer(modifier = Modifier.height(24.dp))

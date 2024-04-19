@@ -1,23 +1,25 @@
 package di
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavHostController
+import domain.TodoTask
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
-import org.mongodb.kbson.ObjectId
+import ui.screens.SharedViewModel
 import ui.screens.home.HomeViewModel
 import ui.screens.task.TaskViewModel
 import kotlin.reflect.KClass
 
 internal object ViewModelFac : KoinComponent {
     @Composable
-    fun getHomeViewModel(
-        modelClass: KClass<HomeViewModel>
-    ): HomeViewModel {
+    fun getHomeViewModel(): HomeViewModel {
         return viewModel(
-            modelClass,
+            HomeViewModel::class,
             factory = viewModelFactory {
                 initializer { HomeViewModel(get()) }
             })
@@ -25,13 +27,36 @@ internal object ViewModelFac : KoinComponent {
 
     @Composable
     fun getTaskViewModel(
-        currentTaskId: ObjectId? = null,
-        modelClass: KClass<TaskViewModel>
+        currentTask: TodoTask,
     ): TaskViewModel {
         return viewModel(
-            modelClass,
+            modelClass = TaskViewModel::class,
             factory = viewModelFactory {
-                initializer { TaskViewModel(currentTaskId, get()) }
+                initializer { TaskViewModel(currentTask, get()) }
             })
+    }
+
+    @Composable
+    fun NavBackStackEntry.sharedViewModel(
+        navController: NavHostController,
+    ): SharedViewModel {
+        val factory = viewModelFactory {
+            initializer { SharedViewModel() }
+        }
+
+        val navGraphRoute = destination.parent?.route ?: return viewModel(
+            modelClass = SharedViewModel::class,
+            factory = factory
+        )
+
+        val parentEntry = remember(this) {
+            navController.getBackStackEntry(navGraphRoute)
+        }
+
+        return viewModel(
+            modelClass = SharedViewModel::class,
+            viewModelStoreOwner = parentEntry,
+            factory = factory
+        )
     }
 }
