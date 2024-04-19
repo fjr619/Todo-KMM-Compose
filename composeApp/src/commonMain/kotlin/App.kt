@@ -10,7 +10,6 @@ import ui.navigation.AppGraph
 import ui.screens.home.HomeScreen
 import ui.screens.home.HomeViewModel
 import ui.theme.AppTheme
-import ui.util.ViewModelFac
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable

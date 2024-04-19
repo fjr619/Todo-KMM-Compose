@@ -17,17 +17,19 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import di.ViewModelFac
 import ui.screens.home.HomeScreen
 import ui.screens.home.HomeViewModel
-import ui.util.ViewModelFac
+import ui.screens.task.TaskScreen
+import ui.screens.task.TaskViewModel
 
 @Composable
 fun AppGraph(
-    navController: NavHostController  = rememberNavController()
+    navController: NavHostController = rememberNavController()
 ) {
     //https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-navigation-routing.html
     NavHost(
-        navController  = navController,
+        navController = navController,
         startDestination = Route.HomeScreen.route
     ) {
         composable(
@@ -47,18 +49,15 @@ fun AppGraph(
         composable(
             route = Route.TaskScreen.route
         ) {
-            Scaffold {
-                Box(modifier = Modifier.fillMaxSize().padding(it).background(Color.Red), contentAlignment = Alignment.Center) {
-                    TextButton(
-                        onClick = {
-                            navController.navigateUp()
-                        },
-                        content = {
-                            Text(text = "Back")
-                        }
-                    )
-                }
-            }
+            val taskViewModel = ViewModelFac.getTaskViewModel(TaskViewModel::class)
+            val state by taskViewModel.state.collectAsState()
+            TaskScreen(
+                state = state,
+                onNavigateUp = {
+                    navController.navigateUp()
+                },
+                onTaskEvent = taskViewModel::onEvent
+            )
         }
     }
 }
