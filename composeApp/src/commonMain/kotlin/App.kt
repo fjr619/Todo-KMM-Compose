@@ -1,25 +1,9 @@
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Button
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import cafe.adriel.voyager.navigator.Navigator
-import cafe.adriel.voyager.transitions.SlideTransition
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import todokmmcompose.composeapp.generated.resources.Res
-import todokmmcompose.composeapp.generated.resources.compose_multiplatform
 import ui.screens.home.HomeScreen
 import ui.theme.AppTheme
 
@@ -35,8 +19,16 @@ fun App(
         dynamicColor = dynamicColor
     ) {
 
-        Navigator(HomeScreen()) {
-            SlideTransition(it)
+        val navController = rememberNavController()
+        NavHost(
+            navController = navController,
+            startDestination = "HOME"
+        ) {
+            composable(
+                route = "HOME"
+            ) {
+                HomeScreen()
+            }
         }
 
 //        Surface(
