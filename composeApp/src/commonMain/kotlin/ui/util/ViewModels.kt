@@ -30,6 +30,10 @@ internal object ViewModelFac : KoinComponent {
             })
     }
 }
+
+//https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-lifecycle.html#viewmodel-implementation
+//https://github.com/MatkovIvan/nav_cupcake/blob/master/composeApp/src/commonMain/kotlin/com/matkovivan/nav_cupcake/ViewModels.kt
+
 private class ComposeViewModelStoreOwner: ViewModelStoreOwner {
     override val viewModelStore = ViewModelStore()
     fun dispose() { viewModelStore.clear() }
