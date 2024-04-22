@@ -24,6 +24,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            binaryOption("bundleId", "com.fjr619.todokmmcompose.composeApp")
         }
     }
     
@@ -55,7 +56,7 @@ kotlin {
             implementation(libs.stately.common)
 
             implementation("org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0-alpha01")
-            implementation("org.jetbrains.androidx.navigation:navigation-compose:2.8.0-alpha01")
+            implementation("org.jetbrains.androidx.navigation:navigation-compose:2.8.0-dev1593")
             implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
         }
     }
