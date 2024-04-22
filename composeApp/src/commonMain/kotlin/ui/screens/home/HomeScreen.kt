@@ -55,7 +55,8 @@ fun HomeScreen(
                 onSelect = {
                     navigateToTask(it)
                 },
-                onFavorite = { task, favorite -> onEvent(HomeEvent.SetFavorite(task, favorite))}
+                onFavorite = { task, favorite -> onEvent(HomeEvent.SetFavorite(task, favorite))},
+                onComplete = { task, complete -> onEvent(HomeEvent.SetCompleted(task, complete))}
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -63,7 +64,8 @@ fun HomeScreen(
             DisplayTasks(
                 modifier = Modifier.weight(1f),
                 tasks = state.completedTask,
-                showActive = false
+                showActive = false,
+                onComplete = { task, complete -> onEvent(HomeEvent.SetCompleted(task, complete))}
             )
         }
     }

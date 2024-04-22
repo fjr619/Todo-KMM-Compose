@@ -29,7 +29,8 @@ fun DisplayTasks(
     tasks: RequestState<List<TodoTask>>,
     showActive: Boolean = true,
     onSelect: ((TodoTask) -> Unit)? = null,
-    onFavorite: ((TodoTask, Boolean) -> Unit)? = null
+    onFavorite: ((TodoTask, Boolean) -> Unit)? = null,
+    onComplete: ((TodoTask, Boolean) -> Unit)? = null,
 ) {
     val scrollState = rememberLazyListState()
 
@@ -65,7 +66,7 @@ fun DisplayTasks(
                                 task = task,
                                 onSelect = { onSelect?.invoke(task) },
                                 onComplete = { selectedTask, completed ->
-
+                                    onComplete?.invoke(selectedTask,completed)
                                 },
                                 onFavorite = { selectedTask, favorite ->
                                     onFavorite?.invoke(selectedTask, favorite)

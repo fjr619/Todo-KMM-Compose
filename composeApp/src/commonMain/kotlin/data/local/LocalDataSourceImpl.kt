@@ -14,7 +14,7 @@ class LocalDataSourceImpl(
 ): LocalDataSource {
     override fun readActiveTasks(): Flow<List<ToDoTask>> {
         return realm.query<ToDoTask>(query = "completed == $0", false)
-            .sort(property = "favorite", sortOrder = Sort.DESCENDING)
+//            .sort(property = "favorite", sortOrder = Sort.DESCENDING)
             .asFlow()
             .map {
                 it.list
