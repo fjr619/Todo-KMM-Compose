@@ -2,6 +2,7 @@ package ui.screens.home.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -21,27 +22,35 @@ fun <T> RequestState<T>.DisplayResult(
                 fadeOut(tween(durationMillis = 300))
     }
 ) {
-    AnimatedContent(
-        targetState = this,
-        transitionSpec = transitionSpec,
-        label = "Animated State"
-    ) { state ->
-        when (state) {
-            is RequestState.Idle -> {
-                onIdle?.invoke()
-            }
+    AnimatedVisibility(
+        visible = this is RequestState.Idle,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        onIdle?.invoke()
+    }
 
-            is RequestState.Loading -> {
-                onLoading()
-            }
+    AnimatedVisibility(
+        visible = this is RequestState.Loading,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        onLoading()
+    }
 
-            is RequestState.Success -> {
-                onSuccess(state.getSuccessData())
-            }
+    AnimatedVisibility(
+        visible = this is RequestState.Error,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        onError(getErrorMessage())
+    }
 
-            is RequestState.Error -> {
-                onError(state.getErrorMessage())
-            }
-        }
+    AnimatedVisibility(
+        visible = this is RequestState.Success,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        onSuccess(getSuccessData())
     }
 }

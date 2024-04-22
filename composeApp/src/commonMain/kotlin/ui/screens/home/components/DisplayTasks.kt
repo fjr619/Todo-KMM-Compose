@@ -21,6 +21,7 @@ import domain.TodoTask
 import org.mongodb.kbson.ObjectId
 import ui.screens.components.ErrorScreen
 import ui.screens.components.LoadingScreen
+import ui.screens.home.HomeEvent
 
 @Composable
 fun DisplayTasks(
@@ -28,7 +29,10 @@ fun DisplayTasks(
     tasks: RequestState<List<TodoTask>>,
     showActive: Boolean = true,
     onSelect: ((TodoTask) -> Unit)? = null,
+    onFavorite: ((TodoTask, Boolean) -> Unit)? = null
 ) {
+    val scrollState = rememberLazyListState()
+
     Column(
         modifier = modifier.fillMaxSize()
     ) {
@@ -47,7 +51,6 @@ fun DisplayTasks(
                 ErrorScreen(message = it)
             },
             onSuccess = { listTodo ->
-                val scrollState = rememberLazyListState()
                 if (listTodo.isNotEmpty()) {
                     LazyColumn(
                         modifier = Modifier.padding(horizontal = 24.dp),
@@ -65,7 +68,7 @@ fun DisplayTasks(
 
                                 },
                                 onFavorite = { selectedTask, favorite ->
-
+                                    onFavorite?.invoke(selectedTask, favorite)
                                 },
                                 onDelete = { selectedTask ->
 

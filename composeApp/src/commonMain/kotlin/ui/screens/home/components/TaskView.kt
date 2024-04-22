@@ -1,7 +1,9 @@
 package ui.screens.home.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,9 +22,9 @@ import todokmmcompose.composeapp.generated.resources.Res
 import todokmmcompose.composeapp.generated.resources.delete
 import todokmmcompose.composeapp.generated.resources.star
 
-@OptIn(ExperimentalResourceApi::class)
+@OptIn(ExperimentalResourceApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun TaskView(
+fun LazyItemScope.TaskView(
     task: TodoTask,
     showActive: Boolean = true,
     onSelect: (TodoTask) -> Unit,
@@ -32,6 +34,7 @@ fun TaskView(
 ) {
     Row(
         modifier = Modifier
+            .animateItemPlacement()
             .fillMaxWidth()
             .clickable {
                 if (showActive) onSelect(task)

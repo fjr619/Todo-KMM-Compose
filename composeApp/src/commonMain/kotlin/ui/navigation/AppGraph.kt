@@ -3,6 +3,7 @@ package ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,14 +34,15 @@ fun AppGraph(
             ) {entry ->
                 val homeViewModel = ViewModelFac.getHomeViewModel()
                 val sharedViewModel = entry.sharedViewModel(navController)
-                val state by homeViewModel.state.collectAsState()
+                val state by homeViewModel.state.collectAsStateWithLifecycle()
 
                 HomeScreen(
                     state = state,
                     navigateToTask = {
                         sharedViewModel.set(it)
                         navController.navigate(Route.TaskScreen.route)
-                    }
+                    },
+                    onEvent = homeViewModel::onEvent
                 )
             }
 
@@ -55,9 +57,9 @@ fun AppGraph(
 
             ) {entry ->
                 val sharedViewModel = entry.sharedViewModel(navController)
-                val currentTask by sharedViewModel.currentTask.collectAsState()
+                val currentTask by sharedViewModel.currentTask.collectAsStateWithLifecycle()
                 val taskViewModel = ViewModelFac.getTaskViewModel(currentTask)
-                val state by taskViewModel.state.collectAsState()
+                val state by taskViewModel.state.collectAsStateWithLifecycle()
 
                 TaskScreen(
                     state = state,

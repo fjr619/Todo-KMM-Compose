@@ -25,7 +25,8 @@ import ui.screens.home.components.DisplayTasks
 @Composable
 fun HomeScreen(
     state: HomeUiState,
-    navigateToTask: (TodoTask) -> Unit
+    navigateToTask: (TodoTask) -> Unit,
+    onEvent: (HomeEvent) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -53,7 +54,8 @@ fun HomeScreen(
                 tasks = state.activeTask,
                 onSelect = {
                     navigateToTask(it)
-                }
+                },
+                onFavorite = { task, favorite -> onEvent(HomeEvent.SetFavorite(task, favorite))}
             )
 
             Spacer(modifier = Modifier.height(24.dp))
