@@ -10,7 +10,6 @@ import ui.navigation.AppGraph
 import ui.screens.home.HomeScreen
 import ui.screens.home.HomeViewModel
 import ui.theme.AppTheme
-import ui.util.withViewModelStoreOwner
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -18,7 +17,7 @@ import ui.util.withViewModelStoreOwner
 fun App(
     darkTheme: Boolean,
     dynamicColor: Boolean = false,
-) = withViewModelStoreOwner {
+) {
     AppTheme(
         darkTheme = darkTheme,
         dynamicColor = dynamicColor

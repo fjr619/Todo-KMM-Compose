@@ -18,45 +18,32 @@ import kotlin.reflect.KClass
 internal object ViewModelFac : KoinComponent {
     @Composable
     fun getHomeViewModel(): HomeViewModel {
-        return viewModel(
-            HomeViewModel::class,
-            factory = viewModelFactory {
-                initializer { HomeViewModel(get()) }
-            })
+        return viewModel { HomeViewModel(get()) }
     }
 
     @Composable
     fun getTaskViewModel(
         currentTask: TodoTask,
     ): TaskViewModel {
-        return viewModel(
-            modelClass = TaskViewModel::class,
-            factory = viewModelFactory {
-                initializer { TaskViewModel(currentTask, get()) }
-            })
+        return viewModel { TaskViewModel(currentTask, get()) }
     }
 
     @Composable
     fun NavBackStackEntry.sharedViewModel(
         navController: NavHostController,
     ): SharedViewModel {
-        val factory = viewModelFactory {
-            initializer { SharedViewModel() }
+        val navGraphRoute = destination.parent?.route ?: return viewModel {
+            SharedViewModel()
         }
-
-        val navGraphRoute = destination.parent?.route ?: return viewModel(
-            modelClass = SharedViewModel::class,
-            factory = factory
-        )
 
         val parentEntry = remember(this) {
             navController.getBackStackEntry(navGraphRoute)
         }
 
         return viewModel(
-            modelClass = SharedViewModel::class,
-            viewModelStoreOwner = parentEntry,
-            factory = factory
-        )
+            viewModelStoreOwner = parentEntry
+        ) {
+            SharedViewModel()
+        }
     }
 }

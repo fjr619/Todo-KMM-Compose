@@ -40,7 +40,7 @@ class TaskViewModel(
     }
 
     init {
-        println("get data for ${selectedTask.id?.toHexString()}")
+        println("INI TASK VM get data for ${selectedTask.id?.toHexString()}")
         _state.update {
             it.copy(
                 currentTask = selectedTask
