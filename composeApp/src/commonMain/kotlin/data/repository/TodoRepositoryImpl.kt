@@ -7,6 +7,7 @@ import domain.RequestState
 import domain.TodoTask
 import domain.repository.TodoRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 class TodoRepositoryImpl(
@@ -14,21 +15,31 @@ class TodoRepositoryImpl(
 ): TodoRepository {
     override fun readActiveTasks(): Flow<RequestState<List<TodoTask>>> {
         return localDataSource.readActiveTasks().map {
-            RequestState.Success(
-                data = it.map { result ->
-                    result.toDomain()
-                }
-            )
+            if (it.isNotEmpty()) {
+                RequestState.Success(
+                    data = it.map { result ->
+                        result.toDomain()
+                    }
+                )
+            } else {
+                RequestState.Error("empty data")
+            }
+
         }
     }
 
     override fun readCompletedTasks(): Flow<RequestState<List<TodoTask>>> {
         return localDataSource.readCompletedTasks().map {
-            RequestState.Success(
-                data = it.map { result ->
-                    result.toDomain()
-                }
-            )
+            if (it.isNotEmpty()) {
+                RequestState.Success(
+                    data = it.map { result ->
+                        result.toDomain()
+                    }
+                )
+            } else {
+                RequestState.Error("empty data")
+            }
+
         }
     }
 

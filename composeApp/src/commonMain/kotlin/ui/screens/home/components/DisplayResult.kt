@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
@@ -22,35 +23,26 @@ fun <T> RequestState<T>.DisplayResult(
                 fadeOut(tween(durationMillis = 300))
     }
 ) {
-    AnimatedVisibility(
-        visible = this is RequestState.Idle,
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        onIdle?.invoke()
-    }
 
-    AnimatedVisibility(
-        visible = this is RequestState.Loading,
-        enter = fadeIn(),
-        exit = fadeOut()
+    AnimatedContent(
+        targetState = this,
+        label = "",
+        transitionSpec = transitionSpec,
+        contentKey = { this::class }
     ) {
-        onLoading()
-    }
-
-    AnimatedVisibility(
-        visible = this is RequestState.Error,
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        onError(getErrorMessage())
-    }
-
-    AnimatedVisibility(
-        visible = this is RequestState.Success,
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        onSuccess(getSuccessData())
+        when(it) {
+            is RequestState.Idle -> {
+                onIdle?.invoke()
+            }
+            is RequestState.Loading -> {
+                onLoading()
+            }
+            is RequestState.Error -> {
+                onError(getErrorMessage())
+            }
+            is RequestState.Success -> {
+                onSuccess(getSuccessData())
+            }
+        }
     }
 }
