@@ -18,16 +18,15 @@ fun <T> RequestState<T>.DisplayResult(
     onLoading: @Composable () -> Unit,
     onSuccess: @Composable (T) -> Unit,
     onError: @Composable (String) -> Unit,
-    transitionSpec: AnimatedContentTransitionScope<*>.() -> ContentTransform = {
-        fadeIn(tween(durationMillis = 300)) togetherWith
-                fadeOut(tween(durationMillis = 300))
-    }
 ) {
 
     AnimatedContent(
         targetState = this,
         label = "",
-        transitionSpec = transitionSpec,
+        transitionSpec = {
+            fadeIn(tween(durationMillis = 300)) togetherWith
+                    fadeOut(tween(durationMillis = 300))
+        },
         contentKey = { this::class }
     ) {
         when(it) {

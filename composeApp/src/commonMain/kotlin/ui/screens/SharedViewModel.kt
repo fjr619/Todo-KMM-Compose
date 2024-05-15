@@ -7,7 +7,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 //menggunakan shared view model navigation scope supaya bisa share data class
-class SharedViewModel: ViewModel() {
+class SharedViewModel(
+): ViewModel() {
 
     private val _currentTask: MutableStateFlow<TodoTask> = MutableStateFlow(TodoTask())
     val currentTask = _currentTask.asStateFlow()

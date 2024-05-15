@@ -9,8 +9,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import di.ViewModelFac
-import di.ViewModelFac.sharedViewModel
+import di.koinViewModel
+import di.sharedViewModel
+import org.koin.core.parameter.parametersOf
+import ui.screens.SharedViewModel
 import ui.screens.home.HomeScreen
 import ui.screens.home.HomeViewModel
 import ui.screens.task.TaskScreen
@@ -32,8 +34,8 @@ fun AppGraph(
             composable(
                 route = Route.HomeScreen.route
             ) {entry ->
-                val homeViewModel = ViewModelFac.getHomeViewModel()
-                val sharedViewModel = entry.sharedViewModel(navController)
+                val homeViewModel = koinViewModel<HomeViewModel>()
+                val sharedViewModel = entry.sharedViewModel<SharedViewModel>(navController)
                 val state by homeViewModel.state.collectAsStateWithLifecycle()
 
                 HomeScreen(
@@ -56,9 +58,11 @@ fun AppGraph(
 //            )
 
             ) {entry ->
-                val sharedViewModel = entry.sharedViewModel(navController)
+                val sharedViewModel = entry.sharedViewModel<SharedViewModel>(navController)
                 val currentTask by sharedViewModel.currentTask.collectAsStateWithLifecycle()
-                val taskViewModel = ViewModelFac.getTaskViewModel(currentTask)
+                val taskViewModel = koinViewModel<TaskViewModel>(
+                    parameters = { parametersOf(currentTask) }
+                )
                 val state by taskViewModel.state.collectAsStateWithLifecycle()
 
                 TaskScreen(

@@ -1,5 +1,6 @@
 package ui.screens.home.components
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -34,7 +35,7 @@ fun LazyItemScope.TaskView(
 ) {
     Row(
         modifier = Modifier
-            .animateItemPlacement()
+//            .animateItemPlacement()
             .fillMaxWidth()
             .clickable {
                 if (showActive) onSelect(task)

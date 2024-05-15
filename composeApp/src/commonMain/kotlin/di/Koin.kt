@@ -7,7 +7,8 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
     appDeclaration()
     modules(
         dataModule,
-        domainModule
+        domainModule,
+        viewModelModule
     )
 }
 
